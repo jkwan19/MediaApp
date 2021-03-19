@@ -1,21 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
+import CampaignsList from './src/Components/CampaignsList.js'
+
+const Stack = createStackNavigator();
+
+function App() {
+  const [campaigns, setCampaigns] = useState([]);
+  //fetch JSON API
+  useEffect(() => {
+    fetch("https://www.plugco.in/public/take_home_sample_feed")
+      .then(res => res.json())
+      .then(result => setCampaigns(result.campaigns))
+      .catch(error => console.error(error))
+  }, []);
+
+  function MainScreen({navigation}) {
+    return (
+      <View>
+        <CampaignsList campaigns={campaigns}/>
+      </View>
+    )
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerTitleAlign: 'center'}}>
+        <Stack.Screen name="Main"
+          component={MainScreen}
+          options={{ title: 'PLUGS'}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
