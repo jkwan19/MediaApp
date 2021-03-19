@@ -45,9 +45,9 @@ function DownloadButton (props) {
 
     try {
       const asset = await MediaLibrary.createAssetAsync(downloadedFile.uri);
-      const album = await MediaLibrary.getAlbumAsync('JetFuel');
+      const album = await MediaLibrary.getAlbumAsync('Media');
       if (album === null) {
-        await MediaLibrary.createAlbumAsync('JetFuel', asset, false);
+        await MediaLibrary.createAlbumAsync('Media', asset, false);
       } else {
         await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
       }
